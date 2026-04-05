@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; }
+body { background: transparent; overflow: hidden; }
+#cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  display: none;
+  /* tip of arrow at exact cursor point */
+  transform: translate(-1px, -1px);
+}
+</style>
+</head>
+<body>
+<svg id="cursor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+  <!-- Standard arrow cursor shape -->
+  <polygon
+    points="2,1 2,16 6,12 9,18 11,17 8,11 14,11"
+    fill="white"
+    stroke="black"
+    stroke-width="1.5"
+    stroke-linejoin="round"
+    stroke-linecap="round"
+  />
+</svg>
+<script>
+const { ipcRenderer } = require('electron')
+const cursor = document.getElementById('cursor')
+
+ipcRenderer.on('cursor-pos', (_e, pos) => {
+  cursor.style.left = pos.x + 'px'
+  cursor.style.top = pos.y + 'px'
+})
+
+ipcRenderer.on('show', (_e, visible) => {
+  cursor.style.display = visible ? 'block' : 'none'
+})
+</script>
+</body>
+</html>
